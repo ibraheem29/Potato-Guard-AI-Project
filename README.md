@@ -53,29 +53,6 @@ pip install flask
 
 3. Change API URL in `.env`:
 
-### ***Setup for Flutter app:***
-1. Install Flutter SDK:
-
-2. Install Flutter dependencies
-  - Once Flutter is installed, ensure that you have all necessary dependencies for Flutter development by running:
-   ```
-   flutter doctor
-   ```
-  - Install any missing dependencies according to the instructions provided by `flutter doctor`.
-3. Clone the repository:
-   
-4. Navigate to the project directory:
-   ```
-   cd mobile-app
-   ```
-5. Install dependencies:
-   ```
-   flutter pub get
-   ```
-6. Copy `.env.example` as `.env`.
-
-7. Change API url in `.env`.
-
 ### ***Training the Model:***
 1. Download the data from [kaggle](https://www.kaggle.com/datasets/arjuntejaswi/plant-village).
 2. Only keep folders related to Potatoes.
@@ -97,9 +74,3 @@ jupyter notebook
 3. In cell #2, update the path to dataset.
 4. Run all the Cells one by one.
 5. Model would be saved in `tf-lite-models` folder.
-
-### *WEB Page*
-![Potato-pulse2](Webapp.png)
-
-### ***Result***
-![Potato-pulse2](Webpage2.png)
