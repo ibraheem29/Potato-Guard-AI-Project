@@ -25,6 +25,11 @@ function predictClass() {
                     "predictionResult"
                 );
                 predictionResult.textContent = `${data.prediction_class} (${data.confidence}%)`;
+                
+                let insightText = document.querySelector('.insight-text');
+                if (insightText && data.recommendation) {
+                    insightText.innerHTML = `<strong>AI Insight</strong><br><br><strong>Disease Status:</strong> ${data.prediction_class}<br><strong>Fertilizer / Treatment Recommendation:</strong><br>${data.recommendation}`;
+                }
             }).catch((error) => {
                 console.log(error)
             });

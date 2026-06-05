@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Potato Guard | AI Disease Detection</title>
+    <title>Potato Pulse | AI Disease Detection</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
@@ -16,11 +16,15 @@
             <div class="logo-section">
                 <span class="material-symbols-outlined" style="font-size: 36px;">eco</span>
                 <div class="logo-text">
-                    <h1>Potato Guard</h1>
+                    <h1>Potato Pulse</h1>
                     <p>AI-Powered Leaf Disease Detection</p>
                 </div>
             </div>
-
+            <nav class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">About Model</a>
+                <a href="https://github.com/muhammadali079/Potato-pulse" target="_blank">Documentation</a>
+            </nav>
         </div>
     </header>
 
@@ -74,9 +78,13 @@
     <footer class="main-footer">
         <div class="container footer-content">
             <div>
-                &copy; 2025 Potato Pulse. Powered by TensorFlow & Flask.
+                &copy; 2024 Potato Pulse. Powered by TensorFlow & Flask.
             </div>
-
+            <div class="footer-links">
+                <a href="https://github.com/muhammadali079/Potato-pulse" target="_blank">GitHub</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Contact Us</a>
+            </div>
         </div>
     </footer>
 
@@ -139,6 +147,18 @@
                 if (text.includes('healthy')) {
                     targetNode.classList.add('result-healthy');
                     targetNode.innerHTML = `<span class="material-symbols-outlined" style="vertical-align: middle; margin-right:8px;">check_circle</span> ${targetNode.textContent}`;
+                    const insightText = document.querySelector('.insight-text');
+                    if (insightText) insightText.innerHTML = "<strong>Status: Healthy</strong><br>Maintain regular balanced fertilization to keep the plant strong. No specific disease treatment needed.";
+                } else if (text.includes('early_blight') || text.includes('early blight')) {
+                    targetNode.classList.add('result-disease');
+                    targetNode.innerHTML = `<span class="material-symbols-outlined" style="vertical-align: middle; margin-right:8px;">warning</span> ${targetNode.textContent}`;
+                    const insightText = document.querySelector('.insight-text');
+                    if (insightText) insightText.innerHTML = "<strong>Disease: Early Blight</strong><br><em>Symptoms:</em> Concentric rings on leaves.<br><em>Recommendation:</em> Use a balanced fertilizer with adequate nitrogen and phosphorus. Apply fungicides containing chlorothalonil or copper-based products.";
+                } else if (text.includes('late_blight') || text.includes('late blight')) {
+                    targetNode.classList.add('result-disease');
+                    targetNode.innerHTML = `<span class="material-symbols-outlined" style="vertical-align: middle; margin-right:8px;">warning</span> ${targetNode.textContent}`;
+                    const insightText = document.querySelector('.insight-text');
+                    if (insightText) insightText.innerHTML = "<strong>Disease: Late Blight</strong><br><em>Symptoms:</em> Dark, water-soaked lesions.<br><em>Recommendation:</em> Avoid excessive nitrogen fertilizers. Use fungicides containing mancozeb, chlorothalonil, or copper.";
                 } else if (text.includes('blight')) {
                     targetNode.classList.add('result-disease');
                     targetNode.innerHTML = `<span class="material-symbols-outlined" style="vertical-align: middle; margin-right:8px;">warning</span> ${targetNode.textContent}`;

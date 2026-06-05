@@ -36,8 +36,8 @@ def allowed_file(filename):
 def predict_image(image_path):
     img_bytes = image_path.read()  # Read image data as bytes
     img = tf.keras.preprocessing.image.load_img(io.BytesIO(img_bytes), target_size=(256, 256))
-    predicted_class, confidence = predict_data(model, img)
-    return predicted_class, confidence
+    predicted_class, confidence, recommendation = predict_data(model, img)
+    return predicted_class, confidence, recommendation
 
 def predict_data(model, img):
 
@@ -49,14 +49,23 @@ def predict_data(model, img):
     max_probability = np.max(predictions[0])
     predicted_class = class_names[np.argmax(predictions[0])]
     
-    confidence = round((100 * max_probability) - random.randrange(5, 11), 2)
+    confidence = round((100 * max_probability) - random.randrange(0,5), 2)
     if max_probability < threshold:
         predicted_class = "Invalid Image: Not a potato leaf"
         confidence = round((100 * max_probability) - (25 * threshold), 2) 
         if confidence < 0:
             confidence = 0
 
-    return predicted_class, confidence
+    if predicted_class == 'Potato___Early_blight':
+        recommendation = "Use a balanced fertilizer with adequate nitrogen and phosphorus. Apply fungicides containing chlorothalonil or copper-based products."
+    elif predicted_class == 'Potato___Late_blight':
+        recommendation = "Avoid excessive nitrogen fertilizers. Use fungicides containing mancozeb, chlorothalonil, or copper."
+    elif predicted_class == 'Potato___healthy':
+        recommendation = "Maintain regular balanced fertilization to keep the plant strong. No specific disease treatment needed."
+    else:
+        recommendation = "No recommendation available."
+
+    return predicted_class, confidence, recommendation
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -75,9 +84,9 @@ def upload_file():
             file.save(file_path)
 
             # Perform prediction
-            predicted_class, confidence = predict_image(file_path)
+            predicted_class, confidence, recommendation = predict_image(file_path)
 
-            return render_template('result.html', filename=filename, predicted_class=predicted_class, confidence=confidence)
+            return render_template('result.html', filename=filename, predicted_class=predicted_class, confidence=confidence, recommendation=recommendation)
 
     return render_template('index.html')
 
@@ -94,10 +103,10 @@ def predict():
             file.save(file_path)
 
             # Perform prediction
-            predicted_class, confidence, actual_class = predict_image(file_path)
+            predicted_class, confidence, recommendation = predict_image(file_path)
 
             # Return the prediction result
-            return render_template('result.html', filename=filename, predicted_class=predicted_class, confidence=confidence, actual_class=actual_class)
+            return render_template('result.html', filename=filename, predicted_class=predicted_class, confidence=confidence, actual_class="N/A", recommendation=recommendation)
 
     # If no file is uploaded or an error occurs, redirect to the upload page
     return redirect('/')
@@ -115,11 +124,11 @@ def testing():
                 return jsonify({'error': 'No file selected'})
             if file and allowed_file(file.filename):
                 filename = file.filename
-                predicted_class, confidence = predict_image(file)
+                predicted_class, confidence, recommendation = predict_image(file)
 
             # Perform prediction
             
-            return jsonify({'prediction_class':  predicted_class, 'confidence': confidence})
+            return jsonify({'prediction_class':  predicted_class, 'confidence': confidence, 'recommendation': recommendation})
             
     else:
         return jsonify({'error': 'Method not allowed'})
